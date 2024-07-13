@@ -1,0 +1,68 @@
+﻿@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+
+<div class="modal" tabindex="-1" role="dialog" style="display:@(showModal ? "block" : "none");">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+                <button type="button" class="close" aria-label="Close" @onclick="CloseModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" @bind="username" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" @bind="password" />
+                </div>
+                <button class="btn btn-primary" @onclick="Login">Login</button>
+                <button class="btn btn-secondary" @onclick="NavigateToForgotPassword">Forgot Password</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" @onclick="NavigateToCreateAccount">Create Account</button>
+                <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool showModal;
+    private string username;
+    private string password;
+
+    public void ShowModal()
+    {
+        showModal = true;
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+    private void Login()
+    {
+        // Perform login logic here
+        Console.WriteLine($"Logging in with Username: {username}, Password: {password}");
+        CloseModal();
+    }
+
+    private void NavigateToForgotPassword()
+    {
+        Navigation.NavigateTo("/forgotpassword");
+        CloseModal();
+    }
+
+    private void NavigateToCreateAccount()
+    {
+        Navigation.NavigateTo("/createaccount");
+        CloseModal();
+    }
+}

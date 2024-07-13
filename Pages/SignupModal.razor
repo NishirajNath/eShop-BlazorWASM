@@ -1,0 +1,158 @@
+﻿@page "/signup"
+
+@inject NavigationManager Navigation
+
+<h3>Create an Account</h3>
+
+<div class="container">
+    <EditForm Model="@userModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="email">Email*</label>
+            <InputText id="email" class="form-control" @bind-Value="userModel.Email" />
+            <ValidationMessage For="@(() => userModel.Email)" />
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number*</label>
+            <InputText id="phoneNumber" class="form-control" @bind-Value="userModel.PhoneNumber" />
+            <ValidationMessage For="@(() => userModel.PhoneNumber)" />
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username*</label>
+            <InputText id="username" class="form-control" @bind-Value="userModel.Username" />
+            <ValidationMessage For="@(() => userModel.Username)" />
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <InputSelect id="gender" class="form-control" @bind-Value="userModel.Gender">
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="dateOfBirth">Date of Birth*</label>
+            <InputDate id="dateOfBirth" class="form-control" @bind-Value="userModel.DateOfBirth" />
+            <ValidationMessage For="@(() => userModel.DateOfBirth)" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password*</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="userModel.Password" />
+            <ValidationMessage For="@(() => userModel.Password)" />
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password*</label>
+            <InputText id="confirmPassword" type="password" class="form-control" @bind-Value="userModel.ConfirmPassword" />
+            <ValidationMessage For="@(() => userModel.ConfirmPassword)" />
+        </div>
+
+        <div class="form-group">
+            <label for="addressLine1">Address Line 1*</label>
+            <InputText id="addressLine1" class="form-control" @bind-Value="userModel.AddressLine1" />
+            <ValidationMessage For="@(() => userModel.AddressLine1)" />
+        </div>
+
+        <div class="form-group">
+            <label for="addressLine2">Address Line 2</label>
+            <InputText id="addressLine2" class="form-control" @bind-Value="userModel.AddressLine2" />
+        </div>
+
+        <div class="form-group">
+            <label for="city">City*</label>
+            <InputText id="city" class="form-control" @bind-Value="userModel.City" />
+            <ValidationMessage For="@(() => userModel.City)" />
+        </div>
+
+        <div class="form-group">
+            <label for="state">State*</label>
+            <InputSelect id="state" class="form-control" @bind-Value="userModel.State">
+                <option value="">Select State</option>
+                @foreach (var state in indianStates)
+                {
+                    <option value="@state">@state</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => userModel.State)" />
+        </div>
+
+        <div class="form-group">
+            <label for="pincode">Pincode*</label>
+            <InputText id="pincode" class="form-control" @bind-Value="userModel.Pincode" />
+            <ValidationMessage For="@(() => userModel.Pincode)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </EditForm>
+</div>
+
+@code {
+    private UserModel userModel = new UserModel();
+
+    private readonly List<string> indianStates = new List<string>
+    {
+        "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
+        "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh",
+        "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+        "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
+        "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu",
+        "Lakshadweep", "Delhi", "Puducherry", "Ladakh", "Jammu & Kashmir"
+    };
+
+    private void HandleValidSubmit()
+    {
+        // Handle the form submission here
+        Console.WriteLine($"Sign up with: {userModel.Username}, {userModel.Email}");
+        Navigation.NavigateTo("/");
+    }
+
+    public class UserModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        public string Username { get; set; }
+
+        public string Gender { get; set; }
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
+
+        [Required]
+        [MinLength(6)]
+        public string Password { get; set; }
+
+        [Required]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string AddressLine1 { get; set; }
+
+        public string AddressLine2 { get; set; }
+
+        [Required]
+        public string City { get; set; }
+
+        [Required]
+        public string State { get; set; }
+
+        [Required]
+        [RegularExpression(@"^\d{6}$", ErrorMessage = "Invalid Pincode")]
+        public string Pincode { get; set; }
+    }
+}
